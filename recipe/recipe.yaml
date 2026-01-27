@@ -11,7 +11,7 @@ source:
   sha256: 6830c68399aeb69c721f9f4fe081a329d49d27ecf0640230e42e8d4c11fb0f9f
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
