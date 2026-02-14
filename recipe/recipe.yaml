@@ -32,9 +32,7 @@ outputs:
       run_exports:
         - ${{ pin_subpackage("libroboplan-example-models", upper_bound="x.x.x") }}
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
@@ -68,9 +66,7 @@ outputs:
       run_exports:
         - ${{ pin_subpackage("libroboplan", upper_bound="x.x.x") }}
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
@@ -108,9 +104,7 @@ outputs:
       run_exports:
         - ${{ pin_subpackage("libroboplan-rrt", upper_bound="x.x.x") }}
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
@@ -141,9 +135,7 @@ outputs:
       run_exports:
         - ${{ pin_subpackage("libroboplan-simple-ik", upper_bound="x.x.x") }}
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
@@ -179,9 +171,7 @@ outputs:
       run_exports:
         - ${{ pin_subpackage("libroboplan-toppra", upper_bound="x.x.x") }}
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
@@ -214,9 +204,7 @@ outputs:
         $PYTHON -m pip install ./bindings -vv --no-build-isolation --no-deps
     requirements:
       build:
-        - if: linux
-          then:
-            - ${{ stdlib('c') }}
+        - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
