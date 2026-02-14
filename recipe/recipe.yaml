@@ -275,9 +275,11 @@ outputs:
         - libroboplan-toppra
         - libtoppra
     tests:
-      - python:
-          imports:
-            - roboplan
+      - if: build_platform == target_platform
+        then:
+          python:
+            imports:
+              - roboplan
 
 about:
   homepage: https://github.com/open-planning/roboplan
