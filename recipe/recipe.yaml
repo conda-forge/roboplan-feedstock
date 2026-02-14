@@ -25,6 +25,7 @@ outputs:
           -B build/roboplan_example_models \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_example_models
         cmake --install build/roboplan_example_models
@@ -59,6 +60,7 @@ outputs:
           -B build/roboplan \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan
         cmake --install build/roboplan
@@ -134,6 +136,7 @@ outputs:
           -B build/roboplan_rrt \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_rrt
         cmake --install build/roboplan_rrt
@@ -165,6 +168,7 @@ outputs:
           -B build/roboplan_simple_ik \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_simple_ik
         cmake --install build/roboplan_simple_ik
@@ -201,6 +205,7 @@ outputs:
           -B build/roboplan_toppra \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_toppra
         cmake --install build/roboplan_toppra
