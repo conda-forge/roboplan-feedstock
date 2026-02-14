@@ -1,6 +1,6 @@
 @echo off
 
-cmake -S "%SRC_DIR%\cpp" ^
+cmake -S "%SRC_DIR%\roboplan_example_models" ^
       -B build\roboplan_example_models ^
       -G Ninja ^
       %CMAKE_ARGS%
