@@ -275,11 +275,9 @@ outputs:
         - libroboplan-toppra
         - libtoppra
     tests:
-      - if: not osx and not arm64
-        then:
-          python:
-            imports:
-              - roboplan
+      - python:
+          imports:
+            - roboplan
 
 about:
   homepage: https://github.com/open-planning/roboplan
