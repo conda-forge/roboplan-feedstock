@@ -249,6 +249,8 @@ outputs:
         - pip
         - nanobind
         - scikit-build-core
+        - if: build_platform != target_platform
+          then: cross-python_${{ target_platform }}
       host:
         - python >=${{ python_min }}
         - pip
