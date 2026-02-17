@@ -83,6 +83,7 @@ Current release info
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan-green.svg)](https://anaconda.org/conda-forge/libroboplan) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan.svg)](https://anaconda.org/conda-forge/libroboplan) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan.svg)](https://anaconda.org/conda-forge/libroboplan) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan.svg)](https://anaconda.org/conda-forge/libroboplan) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan--example--models-green.svg)](https://anaconda.org/conda-forge/libroboplan-example-models) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan-example-models.svg)](https://anaconda.org/conda-forge/libroboplan-example-models) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan-example-models.svg)](https://anaconda.org/conda-forge/libroboplan-example-models) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan-example-models.svg)](https://anaconda.org/conda-forge/libroboplan-example-models) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan--oink-green.svg)](https://anaconda.org/conda-forge/libroboplan-oink) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan-oink.svg)](https://anaconda.org/conda-forge/libroboplan-oink) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan-oink.svg)](https://anaconda.org/conda-forge/libroboplan-oink) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan-oink.svg)](https://anaconda.org/conda-forge/libroboplan-oink) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan--rrt-green.svg)](https://anaconda.org/conda-forge/libroboplan-rrt) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan-rrt.svg)](https://anaconda.org/conda-forge/libroboplan-rrt) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan-rrt.svg)](https://anaconda.org/conda-forge/libroboplan-rrt) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan-rrt.svg)](https://anaconda.org/conda-forge/libroboplan-rrt) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan--simple--ik-green.svg)](https://anaconda.org/conda-forge/libroboplan-simple-ik) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan-simple-ik.svg)](https://anaconda.org/conda-forge/libroboplan-simple-ik) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan-simple-ik.svg)](https://anaconda.org/conda-forge/libroboplan-simple-ik) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan-simple-ik.svg)](https://anaconda.org/conda-forge/libroboplan-simple-ik) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libroboplan--toppra-green.svg)](https://anaconda.org/conda-forge/libroboplan-toppra) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libroboplan-toppra.svg)](https://anaconda.org/conda-forge/libroboplan-toppra) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libroboplan-toppra.svg)](https://anaconda.org/conda-forge/libroboplan-toppra) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libroboplan-toppra.svg)](https://anaconda.org/conda-forge/libroboplan-toppra) |
@@ -98,16 +99,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libroboplan, libroboplan-example-models, libroboplan-rrt, libroboplan-simple-ik, libroboplan-toppra, roboplan-python` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libroboplan, libroboplan-example-models, libroboplan-oink, libroboplan-rrt, libroboplan-simple-ik, libroboplan-toppra, roboplan-python` can be installed with `conda`:
 
 ```
-conda install libroboplan libroboplan-example-models libroboplan-rrt libroboplan-simple-ik libroboplan-toppra roboplan-python
+conda install libroboplan libroboplan-example-models libroboplan-oink libroboplan-rrt libroboplan-simple-ik libroboplan-toppra roboplan-python
 ```
 
 or with `mamba`:
 
 ```
-mamba install libroboplan libroboplan-example-models libroboplan-rrt libroboplan-simple-ik libroboplan-toppra roboplan-python
+mamba install libroboplan libroboplan-example-models libroboplan-oink libroboplan-rrt libroboplan-simple-ik libroboplan-toppra roboplan-python
 ```
 
 It is possible to list all of the versions of `libroboplan` available on your platform with `conda`:
