@@ -1,6 +1,6 @@
 context:
   name: roboplan
-  version: "0.1.0"
+  version: "0.2.0"
 
 recipe:
   name: roboplan
@@ -8,10 +8,10 @@ recipe:
 
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 6830c68399aeb69c721f9f4fe081a329d49d27ecf0640230e42e8d4c11fb0f9f
+  sha256: cc8f630975bbb29674e981b1a46899d94d13dd9e1bc9bfa58edc64182e216870
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   - package:
@@ -85,6 +85,43 @@ outputs:
       - package_contents:
           lib:
             - roboplan
+
+  - package:
+      name: libroboplan-oink
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_oink" \
+          -B build/roboplan_oink \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_oink
+        cmake --install build/roboplan_oink
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("libroboplan-oink", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+      host:
+        - gtest
+        - libroboplan
+        - libroboplan-example-models
+        - osqp-eigen
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_oink
 
   - package:
       name: libroboplan-rrt
@@ -219,6 +256,7 @@ outputs:
         - scikit-build-core
         - libroboplan
         - libroboplan-example-models
+        - libroboplan-oink
         - libroboplan-rrt
         - libroboplan-simple-ik
         - libroboplan-toppra
@@ -229,6 +267,7 @@ outputs:
         - pinocchio-python
         - libroboplan
         - libroboplan-example-models
+        - libroboplan-oink
         - libroboplan-rrt
         - libroboplan-simple-ik
         - libroboplan-toppra
