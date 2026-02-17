@@ -99,6 +99,7 @@ outputs:
           -B build/roboplan_oink \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_TESTING=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_oink
         cmake --install build/roboplan_oink
