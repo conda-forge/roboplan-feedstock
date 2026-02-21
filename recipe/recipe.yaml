@@ -11,7 +11,7 @@ source:
   sha256: cc8f630975bbb29674e981b1a46899d94d13dd9e1bc9bfa58edc64182e216870
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   - package:
@@ -78,6 +78,7 @@ outputs:
         - libpinocchio
         - yaml-cpp
         - libroboplan-example-models
+        - eigen-abi-devel
       ignore_run_exports:
         by_name:
           - gtest
@@ -116,6 +117,7 @@ outputs:
         - libroboplan
         - libroboplan-example-models
         - osqp-eigen
+        - eigen-abi-devel
       ignore_run_exports:
         by_name:
           - gtest
@@ -153,6 +155,7 @@ outputs:
         - gtest
         - libroboplan
         - libroboplan-example-models
+        - eigen-abi-devel
     tests:
       - package_contents:
           lib:
@@ -185,6 +188,7 @@ outputs:
         - gtest
         - libroboplan
         - libroboplan-example-models
+        - eigen-abi-devel
       ignore_run_exports:
         by_name:
           - gtest
@@ -223,6 +227,7 @@ outputs:
         - libroboplan
         - libroboplan-example-models
         - libtoppra
+        - eigen-abi-devel
       ignore_run_exports:
         by_name:
           - gtest
@@ -264,6 +269,7 @@ outputs:
         - libroboplan-simple-ik
         - libroboplan-toppra
         - libtoppra
+        - eigen-abi-devel
       run:
         - python >=${{ python_min }}
         - numpy
