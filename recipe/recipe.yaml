@@ -75,7 +75,7 @@ outputs:
       host:
         - gtest
         - libcoal
-        - libpinocchio
+        - libpinocchio ==3.9.0
         - yaml-cpp
         - libroboplan-example-models
         - eigen-abi-devel
@@ -273,7 +273,7 @@ outputs:
       run:
         - python >=${{ python_min }}
         - numpy
-        - pinocchio-python
+        - pinocchio-python ==3.9.0
         - libroboplan
         - libroboplan-example-models
         - libroboplan-oink
