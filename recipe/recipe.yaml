@@ -11,7 +11,7 @@ source:
   sha256: 957f7bff8b81f9fedb851cc5b4528dd4b8291a538345906ec9ceb0944a1c3ca1
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -251,14 +251,14 @@ outputs:
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
-        - python >=${{ python_min }}
+        - python
         - pip
         - nanobind
         - scikit-build-core
         - if: build_platform != target_platform
           then: cross-python_${{ target_platform }}
       host:
-        - python >=${{ python_min }}
+        - python
         - pip
         - nanobind
         - scikit-build-core
@@ -271,7 +271,7 @@ outputs:
         - libtoppra
         - eigen-abi-devel
       run:
-        - python >=${{ python_min }}
+        - python
         - numpy
         - pinocchio-python ==3.9.0
         - libroboplan
