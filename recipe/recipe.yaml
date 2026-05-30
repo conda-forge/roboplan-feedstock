@@ -80,8 +80,8 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
         - gtest
         - python
@@ -171,8 +171,8 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
         - gtest
         - python
@@ -267,8 +267,8 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
         - gtest
         - python
@@ -355,8 +355,8 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
         - gtest
         - python
@@ -442,8 +442,8 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
         - gtest
         - python
@@ -535,8 +535,9 @@ outputs:
         - ninja
         - python
         - nanobind
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
+
       host:
         - gtest
         - python
