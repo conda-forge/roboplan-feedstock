@@ -557,7 +557,7 @@ outputs:
           then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
-        - toppra
+        - libtoppra
         - eigen-abi-devel
       run:
         - python
