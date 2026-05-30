@@ -86,6 +86,8 @@ outputs:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
       run:
         - python
         - numpy
@@ -177,6 +179,8 @@ outputs:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
         - libcoal
         - libpinocchio ==4.0.0
         - yaml-cpp
@@ -273,6 +277,8 @@ outputs:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
         - osqp-eigen
@@ -361,6 +367,8 @@ outputs:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
@@ -448,6 +456,8 @@ outputs:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
@@ -537,11 +547,12 @@ outputs:
         - nanobind
         - if: match(python, "<3.11")
           then: typing_extensions
-
       host:
         - gtest
         - python
         - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
         - toppra
