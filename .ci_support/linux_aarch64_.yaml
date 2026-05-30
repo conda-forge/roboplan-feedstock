@@ -28,3 +28,5 @@ python:
 - 3.14.* *_cp314
 target_platform:
 - linux-aarch64
+tinyxml2:
+- '11.0'
