@@ -132,6 +132,7 @@ outputs:
         - gtest
         - libcoal
         - libpinocchio ==4.0.0
+        - tinyxml2
         - yaml-cpp
         - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
@@ -183,6 +184,7 @@ outputs:
           then: typing_extensions
         - libcoal
         - libpinocchio ==4.0.0
+        - tinyxml2
         - yaml-cpp
         - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
