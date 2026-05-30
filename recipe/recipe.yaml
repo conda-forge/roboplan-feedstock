@@ -7,6 +7,7 @@ recipe:
   version: ${{ version }}
 
 source:
+  # TODO: Release version 0.4.0 and update the URL and SHA256.
   # url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
   # sha256: 957f7bff8b81f9fedb851cc5b4528dd4b8291a538345906ec9ceb0944a1c3ca1
   git: https://github.com/open-planning/roboplan.git
@@ -130,7 +131,7 @@ outputs:
         - libcoal
         - libpinocchio ==4.0.0
         - yaml-cpp
-        - libroboplan-example-models
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
       ignore_run_exports:
         by_name:
@@ -179,12 +180,13 @@ outputs:
         - libcoal
         - libpinocchio ==4.0.0
         - yaml-cpp
-        - roboplan-example-models-python
+        - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
       run:
         - python
         - numpy
         - pinocchio-python ==4.0.0
+        - roboplan-example-models-python ==${{ version }}
       ignore_run_exports:
         by_name:
           - gtest
@@ -223,8 +225,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - osqp-eigen
         - eigen-abi-devel
       ignore_run_exports:
@@ -271,14 +273,14 @@ outputs:
         - gtest
         - python
         - nanobind
-        - roboplan-python
-        - roboplan-example-models-python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
         - osqp-eigen
         - eigen-abi-devel
       run:
         - python
-        - numpy
-        - pinocchio-python ==4.0.0
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
       ignore_run_exports:
         by_name:
           - gtest
@@ -290,7 +292,7 @@ outputs:
             - roboplan_oink
       - python:
           imports:
-            - roboplan.oink
+            - roboplan.optimal_ik
 
   - package:
       name: libroboplan-rrt
@@ -317,8 +319,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
     tests:
       - package_contents:
@@ -359,13 +361,13 @@ outputs:
         - gtest
         - python
         - nanobind
-        - roboplan-python
-        - roboplan-example-models-python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
       run:
         - python
-        - numpy
-        - pinocchio-python ==4.0.0
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
     tests:
       - package_contents:
           lib:
@@ -399,8 +401,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
       ignore_run_exports:
         by_name:
@@ -444,13 +446,15 @@ outputs:
           then: cross-python_${{ target_platform }}
       host:
         - gtest
-        - roboplan-python
-        - roboplan-example-models-python
+        - python
+        - nanobind
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
         - eigen-abi-devel
       run:
         - python
-        - numpy
-        - pinocchio-python ==4.0.0
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
       ignore_run_exports:
         by_name:
           - gtest
@@ -489,8 +493,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - libtoppra
         - eigen-abi-devel
       ignore_run_exports:
@@ -537,14 +541,14 @@ outputs:
         - gtest
         - python
         - nanobind
-        - roboplan-python
-        - roboplan-example-models-python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
         - toppra
         - eigen-abi-devel
       run:
         - python
-        - numpy
-        - pinocchio-python ==4.0.0
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
       ignore_run_exports:
         by_name:
           - gtest
