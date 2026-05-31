@@ -11,7 +11,7 @@ source:
   # url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
   # sha256: 957f7bff8b81f9fedb851cc5b4528dd4b8291a538345906ec9ceb0944a1c3ca1
   git: https://github.com/open-planning/roboplan.git
-  rev: 35cd47c2a3c09f908e8993c852fc43725c22606c
+  rev: ae9622887af21f4661fd142e5e408c07d6a83877
 
 build:
   number: 0
