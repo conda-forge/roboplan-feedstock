@@ -1,6 +1,6 @@
 context:
   name: roboplan
-  version: "0.3.0"
+  version: "0.4.0"
 
 recipe:
   name: roboplan
@@ -8,10 +8,10 @@ recipe:
 
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 957f7bff8b81f9fedb851cc5b4528dd4b8291a538345906ec9ceb0944a1c3ca1
+  sha256: ef78508d1713d9c7da9eb39403b85b9875887d87f51a2f438ed43e0d65ce9dd9
 
 build:
-  number: 4
+  number: 0
 
 outputs:
   - package:
@@ -25,6 +25,7 @@ outputs:
           -B build/roboplan_example_models \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_example_models
         cmake --install build/roboplan_example_models
@@ -49,6 +50,59 @@ outputs:
             - roboplan_example_models
 
   - package:
+      name: roboplan-example-models-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_example_models" \
+          -B build/roboplan_example_models_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_example_models_python
+        cmake --install build/roboplan_example_models_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-example-models-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      run:
+        - python
+        - numpy
+        - pinocchio-python ==4.0.0
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_example_models
+      - python:
+          imports:
+            - roboplan.example_models
+
+  - package:
       name: libroboplan
       version: ${{ version }}
     build:
@@ -59,6 +113,7 @@ outputs:
           -B build/roboplan \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan
         cmake --install build/roboplan
@@ -73,9 +128,10 @@ outputs:
       host:
         - gtest
         - libcoal
-        - libpinocchio ==3.9.0
+        - libpinocchio ==4.0.0
+        - tinyxml2
         - yaml-cpp
-        - libroboplan-example-models
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
       ignore_run_exports:
         by_name:
@@ -88,6 +144,66 @@ outputs:
             - roboplan
 
   - package:
+      name: roboplan-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan" \
+          -B build/roboplan_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_python
+        cmake --install build/roboplan_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - libcoal
+        - libpinocchio ==4.0.0
+        - tinyxml2
+        - yaml-cpp
+        - roboplan-example-models-python ==${{ version }}
+        - eigen-abi-devel
+      run:
+        - python
+        - numpy
+        - pinocchio-python ==4.0.0
+        - roboplan-example-models-python ==${{ version }}
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan
+      - python:
+          imports:
+            - roboplan.core
+
+  - package:
       name: libroboplan-oink
       version: ${{ version }}
     build:
@@ -98,6 +214,7 @@ outputs:
           -B build/roboplan_oink \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_oink
         cmake --install build/roboplan_oink
@@ -111,8 +228,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - osqp-eigen
         - eigen-abi-devel
       ignore_run_exports:
@@ -126,6 +243,63 @@ outputs:
             - roboplan_oink
 
   - package:
+      name: roboplan-oink-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_oink" \
+          -B build/roboplan_oink_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_oink_python
+        cmake --install build/roboplan_oink_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-oink-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - osqp-eigen
+        - eigen-abi-devel
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_oink
+      - python:
+          imports:
+            - roboplan.optimal_ik
+
+  - package:
       name: libroboplan-rrt
       version: ${{ version }}
     build:
@@ -136,6 +310,7 @@ outputs:
           -B build/roboplan_rrt \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_rrt
         cmake --install build/roboplan_rrt
@@ -149,13 +324,64 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
     tests:
       - package_contents:
           lib:
             - roboplan_rrt
+
+  - package:
+      name: roboplan-rrt-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_rrt" \
+          -B build/roboplan_rrt_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_rrt_python
+        cmake --install build/roboplan_rrt_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-rrt-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - eigen-abi-devel
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_rrt
+      - python:
+          imports:
+            - roboplan.rrt
 
   - package:
       name: libroboplan-simple-ik
@@ -168,6 +394,7 @@ outputs:
           -B build/roboplan_simple_ik \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_simple_ik
         cmake --install build/roboplan_simple_ik
@@ -181,8 +408,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - eigen-abi-devel
       ignore_run_exports:
         by_name:
@@ -195,6 +422,62 @@ outputs:
             - roboplan_simple_ik
 
   - package:
+      name: roboplan-simple-ik-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_simple_ik" \
+          -B build/roboplan_simple_ik_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_simple_ik_python
+        cmake --install build/roboplan_simple_ik_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-simple-ik-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - eigen-abi-devel
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_simple_ik
+      - python:
+          imports:
+            - roboplan.simple_ik
+
+  - package:
       name: libroboplan-toppra
       version: ${{ version }}
     build:
@@ -205,6 +488,7 @@ outputs:
           -B build/roboplan_toppra \
           -G Ninja \
           ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
         cmake --build build/roboplan_toppra
         cmake --install build/roboplan_toppra
@@ -218,8 +502,8 @@ outputs:
         - ninja
       host:
         - gtest
-        - libroboplan
-        - libroboplan-example-models
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
         - libtoppra
         - eigen-abi-devel
       ignore_run_exports:
@@ -233,52 +517,61 @@ outputs:
             - roboplan_toppra
 
   - package:
-      name: roboplan-python
+      name: roboplan-toppra-python
       version: ${{ version }}
     build:
       skip:
         - win
-      script: build_roboplan_bindings.sh
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_toppra" \
+          -B build/roboplan_toppra_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_toppra_python
+        cmake --install build/roboplan_toppra_python
     requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-toppra-python", upper_bound="x.x.x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
         - cmake
         - ninja
         - python
-        - pip
         - nanobind
-        - scikit-build-core
-        - if: build_platform != target_platform
-          then: cross-python_${{ target_platform }}
+        - if: match(python, "<3.11")
+          then: typing_extensions
       host:
+        - gtest
         - python
-        - pip
         - nanobind
-        - scikit-build-core
-        - libroboplan
-        - libroboplan-example-models
-        - libroboplan-oink
-        - libroboplan-rrt
-        - libroboplan-simple-ik
-        - libroboplan-toppra
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
         - libtoppra
         - eigen-abi-devel
       run:
         - python
-        - numpy
-        - pinocchio-python ==3.9.0
-        - libroboplan
-        - libroboplan-example-models
-        - libroboplan-oink
-        - libroboplan-rrt
-        - libroboplan-simple-ik
-        - libroboplan-toppra
-        - libtoppra
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
     tests:
+      - package_contents:
+          lib:
+            - roboplan_toppra
       - python:
           imports:
-            - roboplan
+            - roboplan.toppra
 
 about:
   homepage: https://github.com/open-planning/roboplan
