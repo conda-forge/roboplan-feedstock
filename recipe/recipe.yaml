@@ -7,8 +7,12 @@ recipe:
   version: ${{ version }}
 
 source:
-  url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: ef78508d1713d9c7da9eb39403b85b9875887d87f51a2f438ed43e0d65ce9dd9
+  # TODO: Release version 0.5.0 and update the URL and SHA256.
+  # url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
+  # sha256: ef78508d1713d9c7da9eb39403b85b9875887d87f51a2f438ed43e0d65ce9dd9
+  git: https://github.com/open-planning/roboplan.git
+  rev: 7401cfa97b16bcaa7a651830f483e08efdd28b36
+
 
 build:
   number: 0
@@ -572,6 +576,107 @@ outputs:
       - python:
           imports:
             - roboplan.toppra
+
+  - package:
+      name: libroboplan-cartesian-planning
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_cartesian_planning" \
+          -B build/roboplan_cartesian_planning \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DBUILD_PYTHON_BINDINGS=OFF \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_cartesian_planning
+        cmake --install build/roboplan_cartesian_planning
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("libroboplan-cartesian-planning", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+      host:
+        - gtest
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
+        - libroboplan-oink ==${{ version }}
+        - libroboplan-toppra ==${{ version }}
+        - eigen-abi-devel
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_cartesian_planning
+
+  - package:
+      name: roboplan-cartesian-planning-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+      script: |
+        cmake -S "${SRC_DIR}/roboplan_cartesian_planning" \
+          -B build/roboplan_cartesian_planning_python \
+          -G Ninja \
+          ${CMAKE_ARGS} \
+          -DPython_EXECUTABLE=${PYTHON} \
+          -DPython3_EXECUTABLE=${PYTHON} \
+          -DBUILD_PYTHON_BINDINGS=ON \
+          -DGENERATE_PYTHON_STUBS=ON \
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+        cmake --build build/roboplan_cartesian_planning_python
+        cmake --install build/roboplan_cartesian_planning_python
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage("roboplan-cartesian-planning-python", upper_bound="x.x.x") }}
+      build:
+        - ${{ stdlib('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+      host:
+        - gtest
+        - python
+        - nanobind
+        - if: match(python, "<3.11")
+          then: typing_extensions
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - roboplan-oink ==${{ version }}
+        - roboplan-toppra-python ==${{ version }}
+        - libtoppra
+        - eigen-abi-devel
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - roboplan-oink ==${{ version }}
+        - roboplan-toppra-python ==${{ version }}
+      ignore_run_exports:
+        by_name:
+          - gtest
+        from_package:
+          - gtest
+    tests:
+      - package_contents:
+          lib:
+            - roboplan_cartesian_planning
+      - python:
+          imports:
+            - roboplan.cartesian_planning
 
 about:
   homepage: https://github.com/open-planning/roboplan
