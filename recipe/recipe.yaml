@@ -655,7 +655,7 @@ outputs:
           then: typing_extensions
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
-        - roboplan-oink ==${{ version }}
+        - roboplan-oink-python ==${{ version }}
         - roboplan-toppra-python ==${{ version }}
         - libtoppra
         - eigen-abi-devel
@@ -663,7 +663,7 @@ outputs:
         - python
         - roboplan-python ==${{ version }}
         - roboplan-example-models-python ==${{ version }}
-        - roboplan-oink ==${{ version }}
+        - roboplan-oink-python ==${{ version }}
         - roboplan-toppra-python ==${{ version }}
       ignore_run_exports:
         by_name:
