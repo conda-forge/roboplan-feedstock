@@ -11,7 +11,7 @@ source:
   sha256: 54052a1e637d8a63764cc0bf0a16f19bcbd2e8038f912c25a16c937ad80be9f3
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -672,6 +672,49 @@ outputs:
             - roboplan_cartesian_planning
       - python:
           imports:
+            - roboplan.cartesian_planning
+
+  - package:
+      name: libroboplan-all
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+    requirements:
+      run:
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
+        - libroboplan-oink ==${{ version }}
+        - libroboplan-rrt ==${{ version }}
+        - libroboplan-simple-ik ==${{ version }}
+        - libroboplan-toppra ==${{ version }}
+        - libroboplan-cartesian-planning ==${{ version }}
+
+  - package:
+      name: roboplan-all-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+    requirements:
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - roboplan-oink-python ==${{ version }}
+        - roboplan-rrt-python ==${{ version }}
+        - roboplan-simple-ik-python ==${{ version }}
+        - roboplan-toppra-python ==${{ version }}
+        - roboplan-cartesian-planning-python ==${{ version }}
+    tests:
+      - python:
+          imports:
+            - roboplan.core
+            - roboplan.example_models
+            - roboplan.optimal_ik
+            - roboplan.rrt
+            - roboplan.simple_ik
+            - roboplan.toppra
             - roboplan.cartesian_planning
 
 about:
