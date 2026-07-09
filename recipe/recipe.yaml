@@ -48,6 +48,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_example_models
+      - script:
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
 
   - package:
       name: roboplan-example-models-python
@@ -142,6 +144,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
 
   - package:
       name: roboplan-python
@@ -241,6 +245,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_oink
+      - script:
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
 
   - package:
       name: roboplan-oink-python
@@ -331,6 +337,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_rrt
+      - script:
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
 
   - package:
       name: roboplan-rrt-python
@@ -420,6 +428,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_simple_ik
+      - script:
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
 
   - package:
       name: roboplan-simple-ik-python
@@ -515,6 +525,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_toppra
+      - script:
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
 
   - package:
       name: roboplan-toppra-python
@@ -612,6 +624,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_cartesian_planning
+      - script:
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
 
   - package:
       name: roboplan-cartesian-planning-python
@@ -689,6 +703,15 @@ outputs:
         - libroboplan-simple-ik ==${{ version }}
         - libroboplan-toppra ==${{ version }}
         - libroboplan-cartesian-planning ==${{ version }}
+    tests:
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
 
   - package:
       name: roboplan-all-python
@@ -707,6 +730,14 @@ outputs:
         - roboplan-toppra-python ==${{ version }}
         - roboplan-cartesian-planning-python ==${{ version }}
     tests:
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
       - python:
           imports:
             - roboplan.core
