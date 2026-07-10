@@ -11,7 +11,7 @@ source:
   sha256: 54052a1e637d8a63764cc0bf0a16f19bcbd2e8038f912c25a16c937ad80be9f3
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -48,6 +48,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_example_models
+      - script:
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
 
   - package:
       name: roboplan-example-models-python
@@ -142,6 +144,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
 
   - package:
       name: roboplan-python
@@ -241,6 +245,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_oink
+      - script:
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
 
   - package:
       name: roboplan-oink-python
@@ -331,6 +337,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_rrt
+      - script:
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
 
   - package:
       name: roboplan-rrt-python
@@ -420,6 +428,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_simple_ik
+      - script:
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
 
   - package:
       name: roboplan-simple-ik-python
@@ -515,6 +525,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_toppra
+      - script:
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
 
   - package:
       name: roboplan-toppra-python
@@ -612,6 +624,8 @@ outputs:
       - package_contents:
           lib:
             - roboplan_cartesian_planning
+      - script:
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
 
   - package:
       name: roboplan-cartesian-planning-python
@@ -672,6 +686,66 @@ outputs:
             - roboplan_cartesian_planning
       - python:
           imports:
+            - roboplan.cartesian_planning
+
+  - package:
+      name: libroboplan-all
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+    requirements:
+      run:
+        - libroboplan ==${{ version }}
+        - libroboplan-example-models ==${{ version }}
+        - libroboplan-oink ==${{ version }}
+        - libroboplan-rrt ==${{ version }}
+        - libroboplan-simple-ik ==${{ version }}
+        - libroboplan-toppra ==${{ version }}
+        - libroboplan-cartesian-planning ==${{ version }}
+    tests:
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
+
+  - package:
+      name: roboplan-all-python
+      version: ${{ version }}
+    build:
+      skip:
+        - win
+    requirements:
+      run:
+        - python
+        - roboplan-python ==${{ version }}
+        - roboplan-example-models-python ==${{ version }}
+        - roboplan-oink-python ==${{ version }}
+        - roboplan-rrt-python ==${{ version }}
+        - roboplan-simple-ik-python ==${{ version }}
+        - roboplan-toppra-python ==${{ version }}
+        - roboplan-cartesian-planning-python ==${{ version }}
+    tests:
+      - script:
+          - test -f $PREFIX/lib/libroboplan$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_example_models$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_oink$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_rrt$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_simple_ik$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_toppra$SHLIB_EXT
+          - test -f $PREFIX/lib/libroboplan_cartesian_planning$SHLIB_EXT
+      - python:
+          imports:
+            - roboplan.core
+            - roboplan.example_models
+            - roboplan.optimal_ik
+            - roboplan.rrt
+            - roboplan.simple_ik
+            - roboplan.toppra
             - roboplan.cartesian_planning
 
 about:
