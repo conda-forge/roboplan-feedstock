@@ -1,6 +1,7 @@
 context:
   name: roboplan
-  version: "0.5.0"
+  version: "0.5.1"
+  pinocchio_version: "4.1.0"
 
 recipe:
   name: roboplan
@@ -8,10 +9,10 @@ recipe:
 
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 54052a1e637d8a63764cc0bf0a16f19bcbd2e8038f912c25a16c937ad80be9f3
+  sha256: d92afd52737c5130548efb3b909835cbbf10b0cc6b37f81df18d8c296442566a
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   - package:
@@ -90,7 +91,7 @@ outputs:
       run:
         - python
         - numpy
-        - pinocchio-python ==4.0.0
+        - pinocchio-python ==${{ pinocchio_version }}
       ignore_run_exports:
         by_name:
           - gtest
@@ -130,7 +131,7 @@ outputs:
       host:
         - gtest
         - libcoal
-        - libpinocchio ==4.0.0
+        - libpinocchio ==${{ pinocchio_version }}
         - tinyxml2
         - yaml-cpp
         - libroboplan-example-models ==${{ version }}
@@ -184,7 +185,7 @@ outputs:
         - if: match(python, "<3.11")
           then: typing_extensions
         - libcoal
-        - libpinocchio ==4.0.0
+        - libpinocchio ==${{ pinocchio_version }}
         - tinyxml2
         - yaml-cpp
         - roboplan-example-models-python ==${{ version }}
@@ -192,7 +193,7 @@ outputs:
       run:
         - python
         - numpy
-        - pinocchio-python ==4.0.0
+        - pinocchio-python ==${{ pinocchio_version }}
         - roboplan-example-models-python ==${{ version }}
       ignore_run_exports:
         by_name:
