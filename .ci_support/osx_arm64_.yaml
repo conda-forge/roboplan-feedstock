@@ -18,8 +18,6 @@ eigen_abi_devel:
 - 5.0.1
 macos_machine:
 - arm64-apple-darwin20.0.0
-osqp_eigen:
-- '0.11'
 pin_run_as_build:
   python:
     min_pin: x.x
