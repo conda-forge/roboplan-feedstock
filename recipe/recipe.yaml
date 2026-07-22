@@ -9,8 +9,11 @@ recipe:
   version: ${{ version }}
 
 source:
-  url: https://github.com/open-planning/roboplan/archive/ac5ac173c755537849abd37658567dfa4778a3d6.tar.gz
-  sha256: 4098bd0b50b61fca4c8ae6bdc6ac9f6aeefebe8c1d733cb3728a6e05d91a934f
+  # TODO: Release version 0.6.0 and update the URL and SHA256.
+  # url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
+  # sha256: ef78508d1713d9c7da9eb39403b85b9875887d87f51a2f438ed43e0d65ce9dd9
+  git: https://github.com/open-planning/roboplan.git
+  rev: ea131dd3ca33267d33d9d8db3ecf6ab35a77d2c7
 
 build:
   number: 1
