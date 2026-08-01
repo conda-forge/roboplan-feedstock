@@ -1,6 +1,6 @@
 context:
   name: roboplan
-  version: "0.5.1"
+  version: "0.6.0"
   pinocchio_min: "4.0.0"
   pinocchio_max: "5.0.0"
 
@@ -9,14 +9,11 @@ recipe:
   version: ${{ version }}
 
 source:
-  # TODO: Release version 0.6.0 and update the URL and SHA256.
-  # url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  # sha256: ef78508d1713d9c7da9eb39403b85b9875887d87f51a2f438ed43e0d65ce9dd9
-  git: https://github.com/open-planning/roboplan.git
-  rev: c143d9049c2ec538f0304520cfeb69fe886228a3
+  url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 6de4c3709849d64b4d0f3599d881582763093fc3e57c6541f0556155a68f15f6
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   - package:
