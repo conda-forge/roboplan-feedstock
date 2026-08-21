@@ -1,6 +1,6 @@
 context:
   name: roboplan
-  version: "0.6.0"
+  version: "0.6.1"
   pinocchio_min: "4.0.0"
   pinocchio_max: "5.0.0"
 
@@ -10,7 +10,7 @@ recipe:
 
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: 6de4c3709849d64b4d0f3599d881582763093fc3e57c6541f0556155a68f15f6
+  sha256: 1d6fb63c597be17f48801bec3846166e6403b3130ac61c68973e99335bca83a6
 
 build:
   number: 0
