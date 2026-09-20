@@ -1,7 +1,7 @@
 context:
   name: roboplan
   version: "0.7.0"
-  pinocchio_min: "4.0.0"
+  pinocchio_min: "4.1.0"
   pinocchio_max: "5.0.0"
   library_prefix: ${{ "Library/" if win else "" }}
 
