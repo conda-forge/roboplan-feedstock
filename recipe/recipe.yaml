@@ -14,7 +14,7 @@ source:
   sha256: a1517f16fef9a8c676b95cf48b494e2d89e061c8fdd63d1e5abeaaba28d0504e
 
 build:
-  number: 1
+  number: 2
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
@@ -130,7 +130,7 @@ outputs:
         - ${{ library_prefix }}include/roboplan_bindings/**
         - ${{ library_prefix }}include/tinyxml2/**
         - ${{ library_prefix }}include/tl/**
-        - ${{ library_prefix }}lib/cmake/roboplan/**
+        - ${{ library_prefix }}lib/cmake/roboplan_core/**
         - if: win
           then:
             - Library/bin/roboplan.dll
