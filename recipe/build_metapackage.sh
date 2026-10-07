@@ -12,6 +12,11 @@ else
   PYTHON_ARGS="-DROBOPLAN_PYTHON_INSTALL_DIR=share/roboplan_superbuild_unused"
 fi
 
+# The patch moves roboplan_core's bundled tl/expected.hpp and tinyxml2 sources
+# to third_party/; rattler-build applies the renames as copies, so remove the
+# originals or they stay on roboplan's include path and get installed.
+rm -rf "${SRC_DIR}/roboplan_core/include/tl" "${SRC_DIR}/roboplan_core/include/tinyxml2"
+
 cmake -S "${SRC_DIR}/superbuild" \
   -B build \
   -G Ninja \

@@ -1,0 +1,173 @@
+diff --git a/.clang-format-ignore b/.clang-format-ignore
+index e148526..ca4c593 100644
+--- a/.clang-format-ignore
++++ b/.clang-format-ignore
+@@ -1,3 +1,3 @@
+ # Ignore 3rd party dependencies
+-roboplan_core/include/tl/expected/*
++roboplan_core/third_party/tl/expected/*
+ roboplan_rrt/include/dynotree/*
+diff --git a/.pre-commit-config.yaml b/.pre-commit-config.yaml
+index 4811f85..d35d347 100644
+--- a/.pre-commit-config.yaml
++++ b/.pre-commit-config.yaml
+@@ -88,7 +88,7 @@ repos:
+ exclude: |
+   (?x)^(
+     .*/bindings/python/roboplan/.*\.pyi|
+-    roboplan_core/include/tinyxml2/.*|
+-    roboplan_core/include/tl/.*|
++    roboplan_core/third_party/tinyxml2/.*|
++    roboplan_core/third_party/tl/.*|
+     roboplan_rrt/include/dynotree/.*
+   )$
+diff --git a/roboplan_core/CMakeLists.txt b/roboplan_core/CMakeLists.txt
+index 7311c60..a1d3031 100644
+--- a/roboplan_core/CMakeLists.txt
++++ b/roboplan_core/CMakeLists.txt
+@@ -29,24 +29,38 @@ find_package(ament_cmake QUIET)
+ 
+ set(TARGETS_LIST roboplan)
+ 
+-# Add tl_expected from source only if not found.
+-find_package(tl_expected QUIET)
+-if(NOT tl_expected_FOUND)
++# tl::expected: the system copy if there is one (Debian/Ubuntu libexpected-dev
++# and conda-forge cpp-expected install the tl-expected CMake package), otherwise
++# the bundled header from third_party/.
++find_package(tl-expected QUIET)
++if(TARGET tl::expected)
++  set(ROBOPLAN_EXPECTED_TARGET tl::expected)
++  set(ROBOPLAN_EXPECTED_PACKAGE tl-expected)
++else()
++  message(STATUS "tl-expected not found, using the bundled tl/expected.hpp")
+   add_library(tl_expected INTERFACE)
+   target_include_directories(
+-    tl_expected INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
++    tl_expected INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/third_party>
+                           $<INSTALL_INTERFACE:include>)
++  install(DIRECTORY third_party/tl DESTINATION include)
+   list(APPEND TARGETS_LIST tl_expected)
++  set(ROBOPLAN_EXPECTED_TARGET tl_expected)
++  set(ROBOPLAN_EXPECTED_PACKAGE "")
+ endif()
+ 
+-# Add tinyxml2 from source only if not found.
++# tinyxml2: the system copy if there is one, otherwise the bundled sources from
++# third_party/ (linked privately, so its header is not installed).
+ find_package(tinyxml2_vendor QUIET)
+ find_package(TinyXML2 QUIET)
+ if(NOT tinyxml2_vendor_FOUND
+    AND NOT TinyXML2_FOUND
+    AND NOT TARGET tinyxml2::tinyxml2)
+-  add_library(tinyxml2 include/tinyxml2/tinyxml2.cpp
+-                       include/tinyxml2/tinyxml2.h)
++  message(STATUS "tinyxml2 not found, using the bundled sources")
++  add_library(tinyxml2 third_party/tinyxml2/tinyxml2.cpp
++                       third_party/tinyxml2/tinyxml2.h)
++  target_include_directories(
++    tinyxml2
++    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/third_party/tinyxml2>)
+   add_library(tinyxml2::tinyxml2 ALIAS tinyxml2)
+   list(APPEND TARGETS_LIST tinyxml2)
+ endif()
+@@ -68,7 +82,7 @@ target_include_directories(
+ target_link_libraries(
+   roboplan
+   INTERFACE Eigen3::Eigen
+-  PUBLIC pinocchio::pinocchio
++  PUBLIC pinocchio::pinocchio ${ROBOPLAN_EXPECTED_TARGET}
+   PRIVATE tinyxml2::tinyxml2 console_bridge::console_bridge)
+ if(yaml-cpp_VERSION VERSION_LESS "0.8") # for Ubuntu 22.04
+   target_link_libraries(roboplan PUBLIC yaml-cpp)
+diff --git a/roboplan_core/cmake/roboplanConfig.cmake.in b/roboplan_core/cmake/roboplanConfig.cmake.in
+index cf10569..67554a4 100644
+--- a/roboplan_core/cmake/roboplanConfig.cmake.in
++++ b/roboplan_core/cmake/roboplanConfig.cmake.in
+@@ -3,5 +3,8 @@
+ find_package(Eigen3 REQUIRED)
+ find_package(pinocchio 4.1.0 REQUIRED)
+ find_package(yaml-cpp REQUIRED)
++if(NOT "@ROBOPLAN_EXPECTED_PACKAGE@" STREQUAL "")
++  find_package(@ROBOPLAN_EXPECTED_PACKAGE@ REQUIRED)
++endif()
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/roboplanTargets.cmake")
+diff --git a/roboplan_core/docs/Doxyfile b/roboplan_core/docs/Doxyfile
+index 3cb264a..d55e557 100644
+--- a/roboplan_core/docs/Doxyfile
++++ b/roboplan_core/docs/Doxyfile
+@@ -1047,7 +1047,7 @@ RECURSIVE              = YES
+ # Note that relative paths are relative to the directory from which doxygen is
+ # run.
+ 
+-EXCLUDE                = ../include/tinyxml2 ../include/tl
++EXCLUDE                =
+ 
+ # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
+ # directories that are symbolic links (a Unix file system feature) are excluded
+diff --git a/roboplan_core/pyproject.toml b/roboplan_core/pyproject.toml
+index 641bc5e..6954762 100644
+--- a/roboplan_core/pyproject.toml
++++ b/roboplan_core/pyproject.toml
+@@ -38,8 +38,10 @@ config = { extra-args = ["-DBUILD_PYTHON_BINDINGS=ON", "-DGENERATE_PYTHON_STUBS=
+ 
+ # Conda package "host dependencies"; libraries required to build the package
+ [tool.pixi.package.host-dependencies]
++cpp-expected = ">=1.1"
+ eigen = ">=3.4"
+ pinocchio = ">=4.1.0,<5"
++tinyxml2 = "*"
+ yaml-cpp = ">=0.8.0,<0.9"
+ python = { workspace = true }
+ nanobind = { workspace = true }
+@@ -48,6 +50,11 @@ pytest = { workspace = true }
+ # TBD: move the benchmarks closer to the code they're benchmarking? make benchmarks their own package?
+ pytest-benchmark = { workspace = true }
+ 
++# roboplan's public headers include <tl/expected.hpp>; cpp-expected is
++# header-only and has no run exports of its own.
++[tool.pixi.package.run-dependencies]
++cpp-expected = ">=1.1"
++
+ [tool.pixi.package.run-exports.weak]
+ roboplan-core = { pin-subpackage = true }
+ 
+diff --git a/roboplan_core/include/tinyxml2/LICENSE.txt b/roboplan_core/third_party/tinyxml2/LICENSE.txt
+similarity index 100%
+rename from roboplan_core/include/tinyxml2/LICENSE.txt
+rename to roboplan_core/third_party/tinyxml2/LICENSE.txt
+diff --git a/roboplan_core/include/tinyxml2/README.md b/roboplan_core/third_party/tinyxml2/README.md
+similarity index 100%
+rename from roboplan_core/include/tinyxml2/README.md
+rename to roboplan_core/third_party/tinyxml2/README.md
+diff --git a/roboplan_core/include/tinyxml2/tinyxml2.cpp b/roboplan_core/third_party/tinyxml2/tinyxml2.cpp
+similarity index 100%
+rename from roboplan_core/include/tinyxml2/tinyxml2.cpp
+rename to roboplan_core/third_party/tinyxml2/tinyxml2.cpp
+diff --git a/roboplan_core/include/tinyxml2/tinyxml2.h b/roboplan_core/third_party/tinyxml2/tinyxml2.h
+similarity index 100%
+rename from roboplan_core/include/tinyxml2/tinyxml2.h
+rename to roboplan_core/third_party/tinyxml2/tinyxml2.h
+diff --git a/roboplan_core/include/tl/COPYING b/roboplan_core/third_party/tl/COPYING
+similarity index 100%
+rename from roboplan_core/include/tl/COPYING
+rename to roboplan_core/third_party/tl/COPYING
+diff --git a/roboplan_core/include/tl/expected.hpp b/roboplan_core/third_party/tl/expected.hpp
+similarity index 100%
+rename from roboplan_core/include/tl/expected.hpp
+rename to roboplan_core/third_party/tl/expected.hpp
+diff --git a/superbuild/CMakeLists.txt b/superbuild/CMakeLists.txt
+index 14cb040..2f9a75a 100644
+--- a/superbuild/CMakeLists.txt
++++ b/superbuild/CMakeLists.txt
+@@ -50,6 +50,9 @@ endif()
+ # coal::coal via $<TARGET_PROPERTY:...>, which CMake resolves in the consuming
+ # target's directory, so coal::coal must be visible to every sibling package.
+ find_package(pinocchio 4.1.0 REQUIRED)
++# Likewise tl::expected, which roboplan::roboplan links publicly when a system
++# copy is found (roboplan_core falls back to its bundled header otherwise).
++find_package(tl-expected QUIET)
+ 
+ add_subdirectory("${ROBOPLAN_REPOSITORY_ROOT}/roboplan_common"
+                  "roboplan_common")

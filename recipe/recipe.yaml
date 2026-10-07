@@ -12,9 +12,14 @@ recipe:
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
   sha256: a1517f16fef9a8c676b95cf48b494e2d89e061c8fdd63d1e5abeaaba28d0504e
+  patches:
+    # Use cpp-expected's tl::expected instead of the bundled header and stop
+    # installing the bundled tl/expected.hpp and tinyxml2 sources;
+    # https://github.com/open-planning/roboplan/pull/369
+    - patches/0001-use-system-tl-expected.patch
 
 build:
-  number: 2
+  number: 3
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
@@ -45,6 +50,7 @@ outputs:
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
         - tinyxml2
+        - cpp-expected
         - yaml-cpp
         - proxsuite
         - libtoppra
@@ -78,6 +84,7 @@ outputs:
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
         - tinyxml2
+        - cpp-expected
         - yaml-cpp
         - proxsuite
         - libtoppra
@@ -128,8 +135,6 @@ outputs:
       files:
         - ${{ library_prefix }}include/roboplan/**
         - ${{ library_prefix }}include/roboplan_bindings/**
-        - ${{ library_prefix }}include/tinyxml2/**
-        - ${{ library_prefix }}include/tl/**
         - ${{ library_prefix }}lib/cmake/roboplan_core/**
         - if: win
           then:
@@ -160,8 +165,12 @@ outputs:
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
         - tinyxml2
+        - cpp-expected
         - yaml-cpp
         - eigen-abi-devel
+      run:
+        # roboplan's public headers include <tl/expected.hpp> (header-only, no run_exports)
+        - cpp-expected
     tests:
       - package_contents:
           lib:
