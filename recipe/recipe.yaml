@@ -15,11 +15,13 @@ source:
   patches:
     # Use cpp-expected's tl::expected instead of the bundled header and stop
     # installing the bundled tl/expected.hpp and tinyxml2 sources;
-    # https://github.com/open-planning/roboplan/pull/369
+    # https://github.com/open-planning/roboplan/pull/369, plus keeping the exported
+    # roboplan::tl_expected target that downstream packages (e.g. roboplan_ros) use;
+    # https://github.com/open-planning/roboplan/pull/372
     - patches/0001-use-system-tl-expected.patch
 
 build:
-  number: 3
+  number: 4
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
