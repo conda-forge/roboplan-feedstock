@@ -1,6 +1,7 @@
 context:
   name: roboplan
-  version: "0.7.0"
+  version: "0.8.0"
+  commit: e3b5f67e777eee70c5e315e7579b133cab9d6f74
   pinocchio_min: "4.1.0"
   pinocchio_max: "5.0.0"
   library_prefix: ${{ "Library/" if win else "" }}
@@ -10,18 +11,12 @@ recipe:
   version: ${{ version }}
 
 source:
-  url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: a1517f16fef9a8c676b95cf48b494e2d89e061c8fdd63d1e5abeaaba28d0504e
-  patches:
-    # Use cpp-expected's tl::expected instead of the bundled header and stop
-    # installing the bundled tl/expected.hpp and tinyxml2 sources;
-    # https://github.com/open-planning/roboplan/pull/369, plus keeping the exported
-    # roboplan::tl_expected target that downstream packages (e.g. roboplan_ros) use;
-    # https://github.com/open-planning/roboplan/pull/372
-    - patches/0001-use-system-tl-expected.patch
+  # TODO: switch back to the release tag once 0.8.0 is tagged upstream.
+  url: https://github.com/open-planning/roboplan/archive/${{ commit }}.tar.gz
+  sha256: a9aba39a1290972ebfc34576b8f6b2f804a4ec595e29ed218a2d219c116027d7
 
 build:
-  number: 4
+  number: 0
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
