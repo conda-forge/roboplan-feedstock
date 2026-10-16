@@ -4,6 +4,9 @@ context:
   commit: e3b5f67e777eee70c5e315e7579b133cab9d6f74
   pinocchio_min: "4.1.0"
   pinocchio_max: "5.0.0"
+  nanoflann_min: "2.0.1"
+  proxsuite_min: "0.7.3"
+  toppra_min: "0.6.10"
   library_prefix: ${{ "Library/" if win else "" }}
 
 recipe:
@@ -49,8 +52,9 @@ outputs:
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite
-        - libtoppra
+        - proxsuite >=${{ proxsuite_min }}
+        - libtoppra >=${{ toppra_min }}
+        - nanoflann >=${{ nanoflann_min }}
         - eigen-abi-devel
         - qhull
 
@@ -83,8 +87,9 @@ outputs:
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite
-        - libtoppra
+        - proxsuite >=${{ proxsuite_min }}
+        - libtoppra >=${{ toppra_min }}
+        - nanoflann >=${{ nanoflann_min }}
         - eigen-abi-devel
         - qhull
         - octomap
@@ -206,7 +211,7 @@ outputs:
         - libroboplan-core ==${{ version }}
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
-        - proxsuite
+        - proxsuite >=${{ proxsuite_min }}
         - qhull
         - eigen-abi-devel
     tests:
@@ -223,7 +228,6 @@ outputs:
     build:
       files:
         - ${{ library_prefix }}include/roboplan_rrt/**
-        - ${{ library_prefix }}include/dynotree/**
         - ${{ library_prefix }}lib/cmake/roboplan_rrt/**
         - if: win
           then:
@@ -248,6 +252,7 @@ outputs:
         - libroboplan-core ==${{ version }}
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - nanoflann >=${{ nanoflann_min }}
         - qhull
         - eigen-abi-devel
     tests:
@@ -322,7 +327,7 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libtoppra
+        - libtoppra >=${{ toppra_min }}
         - qhull
         - eigen-abi-devel
     tests:
