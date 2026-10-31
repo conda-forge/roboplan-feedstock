@@ -1,7 +1,6 @@
 context:
   name: roboplan
   version: "0.8.0"
-  commit: 42fe946eddb94b599cdce0a8534c6d43748a9f96
   pinocchio_min: "4.1.0"
   pinocchio_max: "5.0.0"
   nanoflann_min: "2.0.1"
@@ -14,9 +13,8 @@ recipe:
   version: ${{ version }}
 
 source:
-  # TODO: switch back to the release tag once 0.8.0 is tagged upstream.
-  url: https://github.com/open-planning/roboplan/archive/${{ commit }}.tar.gz
-  sha256: 62dd99edb1027343be4683aac956aa9d84a332a61b400fcd499561836f78e4ad
+  url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 7e93c18535d88636b9af3d615a3f6af656561d501cd27beb4f76c2177be1d669
 
 build:
   number: 0
