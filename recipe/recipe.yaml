@@ -1,8 +1,11 @@
 context:
   name: roboplan
-  version: "0.7.0"
+  version: "0.8.0"
   pinocchio_min: "4.1.0"
   pinocchio_max: "5.0.0"
+  nanoflann_min: "2.0.1"
+  proxsuite_min: "0.8.2"
+  toppra_min: "0.6.10"
   library_prefix: ${{ "Library/" if win else "" }}
 
 recipe:
@@ -11,17 +14,10 @@ recipe:
 
 source:
   url: https://github.com/open-planning/roboplan/archive/refs/tags/${{ version }}.tar.gz
-  sha256: a1517f16fef9a8c676b95cf48b494e2d89e061c8fdd63d1e5abeaaba28d0504e
-  patches:
-    # Use cpp-expected's tl::expected instead of the bundled header and stop
-    # installing the bundled tl/expected.hpp and tinyxml2 sources;
-    # https://github.com/open-planning/roboplan/pull/369, plus keeping the exported
-    # roboplan::tl_expected target that downstream packages (e.g. roboplan_ros) use;
-    # https://github.com/open-planning/roboplan/pull/372
-    - patches/0001-use-system-tl-expected.patch
+  sha256: 7e93c18535d88636b9af3d615a3f6af656561d501cd27beb4f76c2177be1d669
 
 build:
-  number: 4
+  number: 0
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
@@ -54,8 +50,9 @@ outputs:
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite
-        - libtoppra
+        - proxsuite >=${{ proxsuite_min }}
+        - libtoppra >=${{ toppra_min }}
+        - nanoflann >=${{ nanoflann_min }}
         - eigen-abi-devel
         - qhull
 
@@ -88,8 +85,9 @@ outputs:
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite
-        - libtoppra
+        - proxsuite >=${{ proxsuite_min }}
+        - libtoppra >=${{ toppra_min }}
+        - nanoflann >=${{ nanoflann_min }}
         - eigen-abi-devel
         - qhull
         - octomap
@@ -211,7 +209,7 @@ outputs:
         - libroboplan-core ==${{ version }}
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
-        - proxsuite
+        - proxsuite >=${{ proxsuite_min }}
         - qhull
         - eigen-abi-devel
     tests:
@@ -228,7 +226,6 @@ outputs:
     build:
       files:
         - ${{ library_prefix }}include/roboplan_rrt/**
-        - ${{ library_prefix }}include/dynotree/**
         - ${{ library_prefix }}lib/cmake/roboplan_rrt/**
         - if: win
           then:
@@ -253,6 +250,7 @@ outputs:
         - libroboplan-core ==${{ version }}
         - libcoal
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - nanoflann >=${{ nanoflann_min }}
         - qhull
         - eigen-abi-devel
     tests:
@@ -327,7 +325,7 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libtoppra
+        - libtoppra >=${{ toppra_min }}
         - qhull
         - eigen-abi-devel
     tests:
@@ -437,11 +435,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-example-models-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-example-models ==${{ version }}
       run:
         - python
@@ -468,11 +469,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-core-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-core ==${{ version }}
         - libcoal
         - octomap
@@ -502,11 +506,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-oink-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-oink ==${{ version }}
         - qhull
       run:
@@ -532,11 +539,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-rrt-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-rrt ==${{ version }}
         - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
         - qhull
@@ -563,11 +573,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-simple-ik-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-simple-ik ==${{ version }}
         - qhull
       run:
@@ -593,11 +606,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-toppra-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-toppra ==${{ version }}
         - qhull
       run:
@@ -623,11 +639,14 @@ outputs:
     requirements:
       run_exports:
         - ${{ pin_subpackage("roboplan-cartesian-planning-python", upper_bound="x.x.x") }}
+        # Downstream nanobind extensions must share our nanobind ABI.
+        - ${{ pin_compatible("nanobind-abi", lower_bound="x", upper_bound="x") }}
       build:
         - ${{ stdlib('c') }}
         - ${{ compiler('cxx') }}
       host:
         - python
+        - nanobind-abi
         - libroboplan-oink ==${{ version }}
         - libroboplan-cartesian-planning ==${{ version }}
       run:
