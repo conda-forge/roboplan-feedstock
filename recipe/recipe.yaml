@@ -17,7 +17,7 @@ source:
   sha256: 7e93c18535d88636b9af3d615a3f6af656561d501cd27beb4f76c2177be1d669
 
 build:
-  number: 0
+  number: 1
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
