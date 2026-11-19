@@ -5,7 +5,7 @@ context:
   pinocchio_max: "5.0.0"
   nanoflann_min: "2.0.1"
   proxsuite_min: "0.8.2"
-  toppra_min: "0.6.10"
+  toppra_min: "0.6.11"
   library_prefix: ${{ "Library/" if win else "" }}
 
 recipe:
@@ -17,7 +17,7 @@ source:
   sha256: 7e93c18535d88636b9af3d615a3f6af656561d501cd27beb4f76c2177be1d669
 
 build:
-  number: 0
+  number: 1
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
