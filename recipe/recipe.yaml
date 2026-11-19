@@ -5,7 +5,7 @@ context:
   pinocchio_max: "5.0.0"
   nanoflann_min: "2.0.1"
   proxsuite_min: "0.8.2"
-  toppra_min: "0.6.11"
+  toppra_min: "0.6.10"
   library_prefix: ${{ "Library/" if win else "" }}
 
 recipe:
