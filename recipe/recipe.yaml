@@ -1,11 +1,6 @@
 context:
   name: roboplan
   version: "0.8.0"
-  pinocchio_min: "4.1.0"
-  pinocchio_max: "5.0.0"
-  nanoflann_min: "2.0.1"
-  proxsuite_min: "0.8.2"
-  toppra_min: "0.6.10"
   library_prefix: ${{ "Library/" if win else "" }}
 
 recipe:
@@ -17,7 +12,7 @@ source:
   sha256: 7e93c18535d88636b9af3d615a3f6af656561d501cd27beb4f76c2177be1d669
 
 build:
-  number: 1
+  number: 2
 
 # Two runs of upstream's superbuild/ tree feed every output below:
 #   - roboplan-cpp: Python bindings off, split into the libroboplan-* outputs.
@@ -46,13 +41,13 @@ outputs:
         - if: win
           then: dlfcn-win32
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - libpinocchio
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite >=${{ proxsuite_min }}
-        - libtoppra >=${{ toppra_min }}
-        - nanoflann >=${{ nanoflann_min }}
+        - proxsuite
+        - libtoppra
+        - nanoflann
         - eigen-abi-devel
         - qhull
 
@@ -79,15 +74,15 @@ outputs:
         - nanobind-abi
         # Stub generation imports the roboplan.* packages, which import these.
         - numpy
-        - pinocchio-python >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - pinocchio-python
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - libpinocchio
         - tinyxml2
         - cpp-expected
         - yaml-cpp
-        - proxsuite >=${{ proxsuite_min }}
-        - libtoppra >=${{ toppra_min }}
-        - nanoflann >=${{ nanoflann_min }}
+        - proxsuite
+        - libtoppra
+        - nanoflann
         - eigen-abi-devel
         - qhull
         - octomap
@@ -163,7 +158,7 @@ outputs:
         - if: win
           then: dlfcn-win32
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - libpinocchio
         - tinyxml2
         - cpp-expected
         - yaml-cpp
@@ -208,8 +203,8 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
-        - proxsuite >=${{ proxsuite_min }}
+        - libpinocchio
+        - proxsuite
         - qhull
         - eigen-abi-devel
     tests:
@@ -249,8 +244,8 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
-        - nanoflann >=${{ nanoflann_min }}
+        - libpinocchio
+        - nanoflann
         - qhull
         - eigen-abi-devel
     tests:
@@ -290,7 +285,7 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - libpinocchio
         - qhull
         - eigen-abi-devel
     tests:
@@ -325,7 +320,7 @@ outputs:
           then: dlfcn-win32
         - libroboplan-core ==${{ version }}
         - libcoal
-        - libtoppra >=${{ toppra_min }}
+        - libtoppra
         - qhull
         - eigen-abi-devel
     tests:
@@ -448,7 +443,7 @@ outputs:
         - python
         - roboplan-common ==${{ version }}
         - numpy
-        - pinocchio-python >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - pinocchio-python
     tests:
       - python:
           pip_check: false
@@ -485,7 +480,7 @@ outputs:
         - python
         - roboplan-common ==${{ version }}
         - numpy
-        - pinocchio-python >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - pinocchio-python
         - roboplan-example-models-python ==${{ version }}
     tests:
       - python:
@@ -548,7 +543,7 @@ outputs:
         - python
         - nanobind-abi
         - libroboplan-rrt ==${{ version }}
-        - libpinocchio >=${{ pinocchio_min }},<${{ pinocchio_max }}
+        - libpinocchio
         - qhull
       run:
         - python
